@@ -20,11 +20,11 @@ export async function getStaticProps() {
   };
 }
 
-type HomePageProps = {
+interface HomePageProps {
   posts: Post[];
   authors: Author[];
   categories: Category[];
-};
+}
 
 const HomePage: React.FC<HomePageProps> = ({ posts, authors, categories }) => {
   return (

@@ -3,11 +3,11 @@ import { PortableText } from '@portabletext/react';
 
 import PortableTextComponents from '@/components/PortableTextComponents';
 
-type PostProps = {
+interface PostProps {
   post: Post;
   author: Author | undefined;
   categories: (Category | undefined)[];
-};
+}
 
 const PostComponent: React.FC<PostProps> = ({ post, author, categories }) => {
   return (

@@ -1,6 +1,6 @@
 import { PortableTextComponent } from '@portabletext/react';
 
-type PortableTextReactComponents = {
+interface PortableTextReactComponents {
   [key: string]: PortableTextComponent<any>;
 };
 
