@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
-import { NavBarMenuIcon } from '@/components/Icons';
+import { NavBarMenuIcon, SearchIcon } from '@/components/Icons';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -9,6 +9,8 @@ interface LayoutProps {
 
 interface NavbarProps {
   direction: 'horizontal' | 'vertical';
+  menuOpen: boolean;
+  toggleMenu: () => void;
 }
 
 /**
@@ -21,7 +23,7 @@ interface NavbarProps {
  * show Narbar horizontally on the right hand of header no matter what
  */
 
-const Navbar: React.FC<NavbarProps> = ({ direction }) => {
+const Navbar: React.FC<NavbarProps> = ({ direction, menuOpen, toggleMenu }) => {
   const className = [
     'flex gap-5 mx-6 justify-center',
     'flex flex-col justify-center items-center sm:hidden',
@@ -34,18 +36,35 @@ const Navbar: React.FC<NavbarProps> = ({ direction }) => {
         } text-base text-gray-700`}
       >
         <li className="">
-          <Link href="/timeline" className="">
+          <Link
+            onClick={menuOpen ? toggleMenu : undefined}
+            href="/timeline"
+            className="hover:underline"
+          >
             Timeline
           </Link>
         </li>
         <li className="">
-          <Link href="/tag" className="">
+          <Link
+            onClick={menuOpen ? toggleMenu : undefined}
+            href="/tag"
+            className="hover:underline"
+          >
             Tag
           </Link>
         </li>
         <li className="">
-          <Link href="/about" className="">
+          <Link
+            onClick={menuOpen ? toggleMenu : undefined}
+            href="/about"
+            className="hover:underline"
+          >
             About
+          </Link>
+        </li>
+        <li className="">
+          <Link href="/" className="f">
+            <SearchIcon className="" />
           </Link>
         </li>
       </ul>
@@ -59,7 +78,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     setMenuOpen(!menuOpen);
   };
   return (
-    <div className="flex flex-col">
+    <div className="flex h-screen flex-col">
       <header className="flex flex-col">
         <Head>
           <meta
@@ -75,13 +94,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           }`}
         >
           <Link
+            onClick={menuOpen ? toggleMenu : undefined}
             href="/"
             className="border border-zinc-600 p-1 text-xl hover:border-dashed sm:mx-6"
           >
             TTH
           </Link>
           <div className="hidden sm:block">
-            <Navbar direction="horizontal" />
+            <Navbar direction="horizontal" menuOpen toggleMenu={toggleMenu} />
           </div>
           <button
             className="text-gray-500 hover:text-gray-900 sm:hidden"
@@ -90,7 +110,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <NavBarMenuIcon className="sm:hidden" />
           </button>
         </div>
-        {menuOpen && <Navbar direction="vertical" />}
+        {menuOpen && (
+          <Navbar direction="vertical" menuOpen toggleMenu={toggleMenu} />
+        )}
       </header>
 
       <main className="container mx-auto flex-1">{children}</main>

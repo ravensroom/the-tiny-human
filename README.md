@@ -1,3 +1,11 @@
+## todos
+
+- [x] When clicking the links on the dropdown menu, toggoleMenuOPen
+- Add search bar and search function
+- In /timeline, group the posts by publishedYear
+- posts are not currently arranged by published date
+- when page change by panigator need to scroll on top
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
