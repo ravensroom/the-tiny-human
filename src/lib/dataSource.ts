@@ -1,5 +1,37 @@
 import type { Post, Author, Category } from '@/lib/types';
-import client from '@/lib/sanityClient';
+import { createClient } from 'next-sanity';
+
+const projectId = process.env.SANITY_PROJECT_ID;
+const dataset = process.env.SANITY_DATASET;
+const apiVersion = process.env.SANITY_API_VERSION;
+
+const client = createClient({
+  projectId,
+  dataset,
+  apiVersion,
+  useCdn: false,
+});
+
+const queryProjectionForAuthor = `{
+  _id,
+  name
+}`;
+
+const queryProjectionForCategories = `{
+  _id,
+  title,
+  slug
+}`;
+
+const queryProjectionForPost = `{
+  _id,
+  title,
+  slug,
+  author->${queryProjectionForAuthor},
+  categories[]->${queryProjectionForCategories},
+  publishedAt,
+  body
+} | order(publishedAt desc)`;
 
 export async function getSlugs() {
   const posts = await getPosts();
@@ -8,48 +40,24 @@ export async function getSlugs() {
 }
 
 export async function getPost(slug: string) {
-  const posts = await getPosts();
-  return posts.find((post) => post.slug.current === slug);
-}
-
-export async function getPostAuthor(post: Post) {
-  const authors = await getAuthors();
-  return authors.find((author) => author._id === post.author._ref);
-}
-
-export async function getPostCategories(post: Post) {
-  const categories = await getCategories();
-  return post.categories.map((c) =>
-    categories.find((cat) => cat._id === c._ref)
-  );
+  const query = `*[_type == "post" && slug.current == $slug][0] ${queryProjectionForPost}`;
+  const post = await client.fetch<Post>(query, { slug });
+  return post;
 }
 
 export async function getPosts() {
   return await client.fetch<Post[]>(`
-    *[_type == "post"] {
-      _id,
-      title,
-      slug,
-      author,
-      categories,
-      publishedAt,
-      body
-    }
-  `);
+    *[_type == "post"] ${queryProjectionForPost}`);
 }
+
 export async function getAuthors() {
   return await client.fetch<Author[]>(`
-    *[_type == "author"] {
-      _id,
-      name
-    }
+    *[_type == "author"] ${queryProjectionForAuthor}
   `);
 }
+
 export async function getCategories() {
   return await client.fetch<Category[]>(`
-    *[_type == "category"] {
-      _id,
-      title
-    }
+    *[_type == "category"] ${queryProjectionForCategories}
   `);
 }

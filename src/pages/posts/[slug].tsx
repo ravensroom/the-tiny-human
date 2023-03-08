@@ -1,12 +1,6 @@
-import PostComponent from '@/components/PostComponent';
-import {
-  getAuthors,
-  getPost,
-  getPostAuthor,
-  getPostCategories,
-  getSlugs,
-} from '@/lib/dataSource';
-import { Author, Category, Post } from '@/lib/types';
+import PostMeta from '@/components/PageMeta';
+import { getPost, getSlugs } from '@/lib/dataSource';
+import { Post } from '@/lib/types';
 import {
   GetStaticPaths,
   GetStaticProps,
@@ -14,6 +8,9 @@ import {
   NextPage,
 } from 'next/types';
 import { ParsedUrlQuery } from 'querystring';
+import { PortableText } from '@portabletext/react';
+
+import PortableTextComponents from '@/components/PortableTextComponents';
 
 interface Params extends ParsedUrlQuery {
   slug: string;
@@ -21,8 +18,6 @@ interface Params extends ParsedUrlQuery {
 
 export interface PostPageProps {
   post: Post;
-  postAuthor: Author;
-  postCategories: Category[];
 }
 
 export const getStaticPaths: GetStaticPaths<Params> = async () => {
@@ -43,18 +38,19 @@ export const getStaticProps: GetStaticProps<PostPageProps, Params> = async (
 ) => {
   const { slug } = context.params!;
   const post = (await getPost(slug)) as Post;
-  const postAuthor = await getPostAuthor(post);
-  const postCategories = await getPostCategories(post);
   return {
-    props: { post, postAuthor, postCategories },
+    props: { post },
     revalidate: 2 * 60,
   };
 };
 
-const PostPage: NextPage<PostPageProps> = (props) => {
+const PostPage: NextPage<PostPageProps> = ({ post }) => {
   return (
     <div className="m-8">
-      <PostComponent {...props} />
+      <article>
+        <PostMeta post={post} />
+      </article>
+      <PortableText value={post.body} components={PortableTextComponents} />
     </div>
   );
 };

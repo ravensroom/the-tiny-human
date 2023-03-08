@@ -1,20 +1,16 @@
 import { useState } from 'react';
-import type { Post, Author, Category } from '@/lib/types';
-import { getPosts, getAuthors, getCategories } from '@/lib/dataSource';
+import type { Post } from '@/lib/types';
+import { getPosts } from '@/lib/dataSource';
 import { NextPage } from 'next';
 import PostBrief from '@/components/PostBrief';
 import Paginator from '@/components/Paginator';
 
 export async function getStaticProps() {
   const posts = await getPosts();
-  const authors = await getAuthors();
-  const categories = await getCategories();
 
   return {
     props: {
       posts,
-      authors,
-      categories,
     },
 
     revalidate: 2 * 60,
@@ -23,13 +19,11 @@ export async function getStaticProps() {
 
 interface HomePageProps {
   posts: Post[];
-  authors: Author[];
-  categories: Category[];
 }
 
 const POST_BRIEFS_PER_PAGE = 5;
 
-const HomePage: NextPage<HomePageProps> = ({ posts, authors, categories }) => {
+const HomePage: NextPage<HomePageProps> = ({ posts }) => {
   let postIndexRange =
     posts.length < POST_BRIEFS_PER_PAGE
       ? [0, posts.length]
@@ -53,20 +47,9 @@ const HomePage: NextPage<HomePageProps> = ({ posts, authors, categories }) => {
       {currentPagePosts.length > 0 && (
         <ul className="m-4 flex flex-col gap-8">
           {currentPagePosts.map((post) => {
-            const author = authors.find(
-              (author) => author._id === post.author._ref
-            ) as Author;
-            const filteredCategories = post.categories.map((c) =>
-              categories.find((cat) => cat._id === c._ref)
-            ) as Category[];
-
             return (
               <li key={post._id}>
-                <PostBrief
-                  post={post}
-                  postAuthor={author}
-                  postCategories={filteredCategories}
-                />
+                <PostBrief post={post} />
               </li>
             );
           })}

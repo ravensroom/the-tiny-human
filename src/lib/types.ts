@@ -4,18 +4,14 @@ export type Post = {
   slug: {
     current: string;
   };
-  author: {
-    _ref: string;
-  };
+  author: Author;
   // mainImage: {
   //   alt: string;
   //   asset: {
   //     url: string;
   //   };
   // };
-  categories: Array<{
-    _ref: string;
-  }>;
+  categories: Array<Category>;
   publishedAt: string;
   body: any;
 };
