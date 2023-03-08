@@ -40,8 +40,9 @@ export async function getSlugs() {
 }
 
 export async function getPost(slug: string) {
-  const query = `*[_type == "post" && slug.current == $slug][0] ${queryProjectionForPost}`;
-  const post = await client.fetch<Post>(query, { slug });
+  const query = `*[_type == "post" && slug.current == $slug]${queryProjectionForPost}[0] `;
+  const params = { slug };
+  const post = await client.fetch<Post>(query, params);
   return post;
 }
 

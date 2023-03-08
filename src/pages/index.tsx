@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import type { Post } from '@/lib/types';
 import { getPosts } from '@/lib/dataSource';
 import { NextPage } from 'next';
@@ -28,6 +29,7 @@ const HomePage: NextPage<HomePageProps> = ({ posts }) => {
     posts.length < POST_BRIEFS_PER_PAGE
       ? [0, posts.length]
       : [0, POST_BRIEFS_PER_PAGE];
+  const router = useRouter();
   const [currentPageIndex, setCurrentPageIndex] = useState<number>(1);
   const [currentPagePosts, setCurrentPagePosts] = useState<Post[]>(
     posts.slice(postIndexRange[0], postIndexRange[1])
@@ -40,6 +42,11 @@ const HomePage: NextPage<HomePageProps> = ({ posts }) => {
       POST_BRIEFS_PER_PAGE * pageIndex,
     ];
     setCurrentPagePosts(posts.slice(postIndexRange[0], postIndexRange[1]));
+    if (pageIndex === 1) {
+      router.push('/');
+    } else {
+      router.push(`/?page=${pageIndex}`);
+    }
   };
 
   return (

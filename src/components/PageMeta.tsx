@@ -9,7 +9,12 @@ const PostMeta: React.FC<PostMetaProps> = ({ post }) => {
   return (
     <header className="mb-5">
       <div className="flex flex-col">
-        <h1 className="text-2xl">{post.title}</h1>
+        <Link
+          href={`/posts/${post.slug.current}`}
+          className="text-2xl hover:underline"
+        >
+          {post.title}
+        </Link>
         <Link href="/about" className="text-sm hover:underline">
           Author: {post.author?.name}
         </Link>

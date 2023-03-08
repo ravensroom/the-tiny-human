@@ -1,5 +1,6 @@
 import type { Post } from '@/lib/types';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { getPosts } from '@/lib/dataSource';
 import { NextPage } from 'next';
@@ -26,6 +27,7 @@ const TimelinePage: NextPage<TimelinePageProps> = ({ posts }) => {
     posts.length < POST_TITLES_PER_PAGE
       ? [0, posts.length]
       : [0, POST_TITLES_PER_PAGE];
+  const router = useRouter();
   const [currentPageIndex, setCurrentPageIndex] = useState<number>(1);
   const [currentPagePosts, setCurrentPagePosts] = useState<Post[]>(
     posts.slice(postIndexRange[0], postIndexRange[1])
@@ -38,7 +40,13 @@ const TimelinePage: NextPage<TimelinePageProps> = ({ posts }) => {
       POST_TITLES_PER_PAGE * pageIndex,
     ];
     setCurrentPagePosts(posts.slice(postIndexRange[0], postIndexRange[1]));
+    if (pageIndex === 1) {
+      router.push('/timeline');
+    } else {
+      router.push(`/timeline?page=${pageIndex}`);
+    }
   };
+
   return (
     <main className="flex h-full flex-col justify-between pb-5">
       {currentPagePosts.length > 0 && (

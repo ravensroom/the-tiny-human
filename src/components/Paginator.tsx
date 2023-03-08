@@ -11,10 +11,10 @@ const Paginator: React.FC<PaginatorProps> = ({
   currentPageIndex = 1,
   onPageChange,
 }) => {
-  const pageSize = Math.ceil(totalItems / itemsPerPage);
-  if (pageSize === 1) return null;
+  const pageRange = Math.ceil(totalItems / itemsPerPage);
+  if (pageRange === 1) return null;
 
-  const pageIndexes = Array.from({ length: pageSize }, (_, i) => i + 1);
+  const pageIndexes = Array.from({ length: pageRange }, (_, i) => i + 1);
 
   return (
     <div className="border-t-1 container mt-4 flex content-end justify-center gap-4">
