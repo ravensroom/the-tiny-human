@@ -13,7 +13,7 @@ export function PostCard({ under, post }: { under: Under; post: Post }) {
 		<>
 			<FullPost under={under} post={trimmedPost} />
 			<Link
-				href={`/collection/${post.slug}`}
+				href={`/${under}/${post.slug}`}
 				className="underline text-gray-500"
 			>
 				Full text &gt;&gt;

@@ -1,1 +1,1 @@
-export type Under = "/home" | "/collection";
+export type Under = 'home' | 'collections'

@@ -12,7 +12,7 @@ export function Navbar() {
 
 			<div className="h-full w-full flex items-center justify-end gap-4 text-[#555555] text-sm font-medium">
 				<Link href="/">Home</Link>
-				<Link href="/collection">Collection</Link>
+				<Link href="/collections">Collections</Link>
 			</div>
 		</div>
 	);
