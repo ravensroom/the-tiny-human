@@ -6,6 +6,7 @@ export type Post = {
 
 export type PostFrontMatter = {
 	title: string;
-	author: string;
-	originLink: string;
+	author?: string;
+	originLink?: string;
+	category?: Array<string>;
 };
